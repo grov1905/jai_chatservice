@@ -8,6 +8,7 @@ from core.ports.inbound import IMessageReceiverPort
 from proto import chat_pb2, chat_pb2_grpc
 from google.protobuf.json_format import MessageToDict
 
+
 class ChatService(chat_pb2_grpc.ChatServiceServicer):
     def __init__(self, message_receiver: IMessageReceiverPort):
         self.message_receiver = message_receiver
