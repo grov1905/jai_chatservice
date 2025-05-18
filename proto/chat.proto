@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// Opciones para Java (necesarias para el cliente Spring Boot)
+option java_multiple_files = true;
+option java_package = "com.jaiexperts.chat";
+option java_outer_classname = "ChatProto";
+
+// Paquete general (para Python/Go/etc)
+package chat;
+
+service ChatService {
+  rpc ProcessMessage (ChatRequest) returns (ChatResponse);
+}
+
+message ChatRequest {
+  string channel = 1;
+  string external_id = 2;
+  string business_id = 3;
+  string content = 4;
+  map<string, string> metadata = 5;
+}
+
+message ChatResponse {
+  string external_id=1;
+  string end_user_id = 2;
+  string conversation_id = 3;
+  string content = 4;
+}

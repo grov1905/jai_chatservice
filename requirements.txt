@@ -1,0 +1,39 @@
+# Dependencias principales
+fastapi==0.95.2
+uvicorn==0.22.0
+python-multipart==0.0.6
+
+# Base de datos y ORM
+sqlalchemy==2.0.15
+psycopg2-binary==2.9.6  # PostgreSQL
+alembic==1.11.1  # Migraciones (opcional)
+
+# HTTP y APIs externas
+httpx==0.24.1
+requests==2.28.2
+
+# Manejo de datos y modelos
+pydantic==1.10.7
+python-dotenv==1.0.0  # Variables de entorno
+
+# UUID y fechas
+uuid==1.30
+python-dateutil==2.8.2
+
+# WebSockets
+websockets==11.0.3
+
+# OpenAI (si usas LLMs directos)
+openai==0.27.8  # Opcional (solo si llamas directamente a la API)
+
+# Testing (opcional)
+pytest==7.3.1
+pytest-asyncio==0.21.0
+httpx==0.24.1
+
+grpcio==1.59.3
+grpcio-tools==1.59.3
+protobuf==4.24.4
+
+python-jose==3.3.0
+passlib==1.7.4

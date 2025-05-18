@@ -1,0 +1,38 @@
+
+ESTRUCTURA ESENCIAL DEL PROYECTO:
+jai_chatservice/
+├── requirements.txt
+├── chat_pb2.py
+├── main.py
+├── chat_pb2_grpc.py
+├── core/
+│   ├── use_cases/
+│   │   ├── receive_message.py
+│   ├── ports/
+│   │   ├── inbound/
+│   │   │   ├── message_receiver.py
+│   │   ├── outbound/
+│   │   │   ├── context_retriever.py
+│   │   │   ├── config_loader.py
+│   │   │   ├── embedding_client.py
+│   │   │   ├── llm_client.py
+│   ├── domain/
+│   │   ├── entities/
+│   │   │   ├── conversation.py
+│   │   │   ├── message.py
+│   │   │   ├── end_user.py
+├── proto/
+│   ├── chat.proto
+├── api/
+│   ├── endpoints/
+├── infrastructure/
+│   ├── config/
+│   │   ├── database.py
+│   │   ├── di.py
+│   ├── adapters/
+│   │   ├── outbound/
+│   │   │   ├── fastapi_embedding.py
+│   │   │   ├── django_config.py
+│   ├── persistence/
+│   │   ├──  models.py
+│   │   ├── repositories.py

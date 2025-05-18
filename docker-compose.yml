@@ -1,0 +1,32 @@
+#jai_chatservice/docker-compose.yml
+
+services:
+
+  chatservice:
+    build: .
+    ports:
+      - "50051:50051"  # gRPC
+      - "8002:8000"    # HTTP/REST
+    expose:
+      - "50051"
+    env_file:
+      - .env  # Todas las configuraciones vienen de aquí
+    depends_on:
+      webflux:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  webflux:
+    build: ../jai_websocket
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env  # Comparte las mismas variables
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
