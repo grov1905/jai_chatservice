@@ -33,18 +33,23 @@ from infrastructure.adapters.inbound import (
 )
 import os
 from dotenv import load_dotenv
+from functools import lru_cache
 
 load_dotenv()
 
+@lru_cache
 def get_config_loader() -> IConfigLoaderPort:
     return DjangoConfigAdapter(os.getenv("DJANGO_API_URL"))
 
+@lru_cache
 def get_embedding_client() -> IEmbeddingClientPort:
     return FastAPIEmbeddingAdapter(os.getenv("FASTAPI_EMBEDDING_URL"))
 
+@lru_cache
 def get_context_retriever() -> IContextRetrieverPort:
     return FastAPIContextRetrieverAdapter(os.getenv("FASTAPI_CONTEXT_URL"))
 
+@lru_cache
 def get_llm_client() -> ILLMClientPort:
     return OpenAIClientAdapter(os.getenv("OPENAI_API_KEY"))
 
@@ -100,15 +105,19 @@ def get_message_receiver(db: Session = None) -> IMessageReceiverPort:
     Versión alternativa que no depende del sistema de inyección de FastAPI.
     """
     """Versión modificada para gRPC que no depende de FastAPI."""
-    if db is None:
-        db = SessionLocal()  # Crea una nueva sesión si no se proporciona
-
-    return ReceiveMessageUseCase(
-        config_loader=get_config_loader(),
-        embedding_client=get_embedding_client(),
-        context_retriever=get_context_retriever(),
-        llm_client=get_llm_client(),
-        end_user_repo=get_end_user_repository(db),
-        conversation_repo=get_conversation_repository(db),
-        message_repo=get_message_repository(db)
-    )
+    db = db or SessionLocal()
+    #if db is None:
+    #        db = SessionLocal()  # Crea una nueva sesión si no se proporciona
+    try:
+        return ReceiveMessageUseCase(
+            config_loader=get_config_loader(),
+            embedding_client=get_embedding_client(),
+            context_retriever=get_context_retriever(),
+            llm_client=get_llm_client(),
+            end_user_repo=get_end_user_repository(db),
+            conversation_repo=get_conversation_repository(db),
+            message_repo=get_message_repository(db)
+        )
+    except Exception:
+        if db: db.close()  # Limpieza segura
+        raise
