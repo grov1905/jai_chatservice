@@ -23,6 +23,7 @@ DATABASE_URL = (
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,          # Verifica conexiones antes de usarlas
+    isolation_level="READ COMMITTED",  # Nivel de aislamiento más seguro
     pool_recycle=300,            # Recicla conexiones cada 5 minutos (Neon tiene timeout de 5 min)
     pool_size=5,                 # Conexiones mantenidas en el pool
     max_overflow=10,             # Conexiones adicionales permitidas
@@ -64,6 +65,7 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
+        db.commit()  # Commit explícito si todo va bien
     except Exception as e:
         db.rollback()
         logger.error(f"Error en la sesión de DB: {str(e)}")
