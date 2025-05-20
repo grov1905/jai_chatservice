@@ -33,23 +33,18 @@ from infrastructure.adapters.inbound import (
 )
 import os
 from dotenv import load_dotenv
-from functools import lru_cache
 
 load_dotenv()
 
-@lru_cache
 def get_config_loader() -> IConfigLoaderPort:
     return DjangoConfigAdapter(os.getenv("DJANGO_API_URL"))
 
-@lru_cache
 def get_embedding_client() -> IEmbeddingClientPort:
     return FastAPIEmbeddingAdapter(os.getenv("FASTAPI_EMBEDDING_URL"))
 
-@lru_cache
 def get_context_retriever() -> IContextRetrieverPort:
     return FastAPIContextRetrieverAdapter(os.getenv("FASTAPI_CONTEXT_URL"))
 
-@lru_cache
 def get_llm_client() -> ILLMClientPort:
     return OpenAIClientAdapter(os.getenv("OPENAI_API_KEY"))
 
