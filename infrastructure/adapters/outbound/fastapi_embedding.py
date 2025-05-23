@@ -13,17 +13,15 @@ class FastAPIEmbeddingAdapter(IEmbeddingClientPort):
     async def vectorize_text(
         self, 
         text: str, 
-        model_name: str, 
-        embedding_dim: int
-    ) -> List[float]:
+        model_name: str
+        ) -> List[float]:
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     f"{self.base_url}/api/v1/embeddings/generate",
                     json={
                         "texts": [text],
-                        "embedding_model": model_name,
-                        "embedding_dim": embedding_dim
+                        "embedding_model": model_name
                     },
                     timeout=30.0
                 )

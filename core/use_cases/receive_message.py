@@ -153,8 +153,7 @@ class ReceiveMessageUseCase(IMessageReceiverPort):
             # 2. Vectorize message
             vector = await self.embedding_client.vectorize_text(
                 message.content,
-                bot_config["embedding_model_name"],
-                bot_config["embedding_dim"]
+                bot_config["embedding_model_name"]
             )
             
             # 3. Retrieve relevant context

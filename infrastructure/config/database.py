@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 DATABASE_URL = (
     f"postgresql+psycopg2://{os.getenv('PGUSER')}:{os.getenv('PGPASSWORD')}"
     f"@{os.getenv('PGHOST')}:{os.getenv('PGPORT')}/{os.getenv('PGDATABASE')}"
-    "?sslmode=require"  # Neon recomienda SSL pero no requiere certificados locales
+    f"?sslmode={os.getenv('SSLMODE')}"  # Neon recomienda SSL pero no requiere certificados locales
     "&connect_timeout=10"  # Timeout de conexión de 10 segundos
 )
 

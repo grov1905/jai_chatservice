@@ -8,7 +8,6 @@ class IEmbeddingClientPort(ABC):
     async def vectorize_text(
         self, 
         text: str, 
-        model_name: str, 
-        embedding_dim: int
-    ) -> List[float]:
+        model_name: str
+        ) -> List[float]:
         """Vectorize text using embedding model"""
