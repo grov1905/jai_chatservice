@@ -1,3 +1,4 @@
+#jai_chatservice/Dockerfile
 FROM python:3.10-slim as builder
 
 # 1. Instala dependencias de compilación
@@ -46,5 +47,5 @@ COPY . .
 # 10. Configura entorno
 ENV PYTHONPATH="${PYTHONPATH}:/app"
 
-EXPOSE 8000
+EXPOSE 8000 50051
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

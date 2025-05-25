@@ -38,3 +38,5 @@ protobuf==4.24.4
 python-jose==3.3.0
 passlib==1.7.4
 tenacity>=8.2.3
+
+twilio

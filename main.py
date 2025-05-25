@@ -54,14 +54,14 @@ async def start_grpc_server():
     server.add_insecure_port(listen_addr)
     await server.start()
     logger.info(f"gRPC server started on {listen_addr}")
-    await server.wait_for_termination()  # Esto mantendrá el servidor corriendo
-
+    #await server.wait_for_termination()  # Esto mantendrá el servidor corriendo
     return server
 
 
 @app.on_event("startup")
 async def startup_event():
     """Inicialización del servicio"""
+    global grpc_server
     try:
         # 1. Base de datos
         init_db()
@@ -69,7 +69,8 @@ async def startup_event():
         
         # 2. Iniciar servidor gRPC
         grpc_server = await start_grpc_server()
-        
+        logger.info("Servidor gRPC iniciado")
+
         # 3. Cliente WebSocket para WebFlux
         websocket_adapter = get_websocket_adapter()
 
@@ -78,9 +79,8 @@ async def startup_event():
             websocket_adapter.connect(),
             name="webflux_ws_connection"
         ) 
-        
-        logger.info("Servicio iniciado. Conectando...")
-        logger.info("Servicio iniciado con gRPC")
+
+        logger.info("Servicio iniciado completamente")
 
     except Exception as e:
         logger.error(f"Error en startup: {str(e)}")
@@ -90,8 +90,11 @@ async def startup_event():
 async def shutdown_event():
     """Limpieza al apagar"""
     try:
-        # Opcional: Cerrar conexiones limpiamente
-        logger.info("Apagando servicio...")
+        if grpc_server:
+            await grpc_server.stop(grace=5)
+            logger.info("Servidor gRPC detenido")
+        
+        logger.info("Servicio apagado correctamente")
     except Exception as e:
         logger.error(f"Error en shutdown: {str(e)}")
 
@@ -105,3 +108,13 @@ async def health():
             "webflux_connection": "active"
         }
     }
+
+# Punto de entrada principal
+if __name__ == "__main__":
+    # Para desarrollo local
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8002,
+        reload=True
+    )

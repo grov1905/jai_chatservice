@@ -7,8 +7,6 @@ services:
     ports:
       - "50051:50051"  # gRPC
       - "8002:8000"    # HTTP/REST
-    expose:
-      - "50051"
     env_file:
       - .env  # Todas las configuraciones vienen de aquí
     depends_on:
@@ -25,8 +23,8 @@ services:
       - "8080:8080"
     env_file:
       - .env  # Comparte las mismas variables
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

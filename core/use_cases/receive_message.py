@@ -82,6 +82,9 @@ class ReceiveMessageUseCase(IMessageReceiverPort):
         logger.info("4. Process message and generate response")
         message=await self._process_message(message, business_id)
 
+        logger.info("return end_user, conversation, message")
+        #logger.info(f"message: {message}")
+
         return end_user, conversation, message
     
     async def _get_or_create_end_user(
@@ -202,6 +205,7 @@ class ReceiveMessageUseCase(IMessageReceiverPort):
                 content=response,
                 timestamp=datetime.utcnow()
             )
+
             await self.message_repo.create(bot_message)
 
             

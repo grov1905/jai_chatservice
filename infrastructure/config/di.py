@@ -33,8 +33,11 @@ from infrastructure.adapters.inbound import (
 )
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 def get_config_loader() -> IConfigLoaderPort:
     return DjangoConfigAdapter(os.getenv("DJANGO_API_URL"))
@@ -79,6 +82,15 @@ def get_message_use_case(
 def get_twilio_adapter(
     message_receiver: IMessageReceiverPort = Depends(get_message_use_case)
 ) -> TwilioWhatsAppAdapter:
+    """
+    Crea una instancia del adaptador de Twilio con validación de configuración
+    """
+    # Validar que las variables de entorno estén configuradas
+    required_vars = ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN"]
+    missing_vars = [var for var in required_vars if not os.getenv(var)]
+    if missing_vars:
+        raise ValueError(f"Variables de entorno faltantes para Twilio: {missing_vars}")
+    logger.info("Inicializando TwilioWhatsAppAdapter")
     return TwilioWhatsAppAdapter(message_receiver)
 
 def get_telegram_adapter(
