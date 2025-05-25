@@ -72,13 +72,13 @@ async def startup_event():
         logger.info("Servidor gRPC iniciado")
 
         # 3. Cliente WebSocket para WebFlux
-        websocket_adapter = get_websocket_adapter()
+        #websocket_adapter = get_websocket_adapter()
 
         # Tarea en segundo plano para conexión persistente
-        asyncio.create_task(
-            websocket_adapter.connect(),
-            name="webflux_ws_connection"
-        ) 
+        #asyncio.create_task(
+        #    websocket_adapter.connect(),
+        #    name="webflux_ws_connection"
+        #) 
 
         logger.info("Servicio iniciado completamente")
 
@@ -105,16 +105,16 @@ async def health():
         "status": "healthy",
         "services": {
             "database": "active",
-            "webflux_connection": "active"
+            "api": "active"
         }
     }
 
 # Punto de entrada principal
-if __name__ == "__main__":
+""" if __name__ == "__main__":
     # Para desarrollo local
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
         reload=True
-    )
+    ) """
