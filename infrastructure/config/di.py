@@ -96,6 +96,20 @@ def get_twilio_adapter(
 def get_telegram_adapter(
     message_receiver: IMessageReceiverPort = Depends(get_message_use_case)
 ) -> TelegramAdapter:
+    """
+    Valida que al menos un token de Telegram esté configurado
+    """
+    # Buscar tokens de Telegram en variables de entorno
+    telegram_tokens = {
+        key: value for key, value in os.environ.items() 
+        if key.startswith("TELEGRAM_TOKEN_") and value
+    }
+    
+    if not telegram_tokens:
+        logger.warning("No se encontraron tokens de Telegram configurados")
+    else:
+        logger.info(f"Tokens de Telegram configurados para: {list(telegram_tokens.keys())}")
+    
     return TelegramAdapter(message_receiver)
 
 def get_websocket_adapter(

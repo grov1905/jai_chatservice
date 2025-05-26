@@ -76,14 +76,30 @@ async def twilio_webhook(
 
 @router.post("/webhooks/telegram")
 async def telegram_webhook(
-    update: dict,
+    request: Request,
+    business_id: str = Query(..., description="ID del negocio"),
     adapter: TelegramAdapter = Depends(get_telegram_adapter)
 ):
-    """Maneja mensajes de Telegram (sin cambios)"""
+    """
+    Maneja mensajes de Telegram con business_id específico
+    URL esperada: /webhooks/telegram?business_id=restaurante
+    """
     try:
-        return await adapter.handle_update(update)
+        # Obtener el JSON del webhook
+        update = await request.json()
+        
+        logger.info(f"Telegram webhook - Business: {business_id}")
+        
+        # Procesar usando el adapter con business_id
+        result = await adapter.handle_update(update, business_id=business_id)
+        
+        return JSONResponse(
+            status_code=200,
+            content=result
+        )
+        
     except Exception as e:
-        logger.error(f"Telegram error: {str(e)}")
+        logger.error(f"Telegram webhook error: {str(e)}")
         return JSONResponse(
             status_code=400,
             content={"status": "error", "message": str(e)}
