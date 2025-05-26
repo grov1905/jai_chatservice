@@ -13,7 +13,7 @@ class TelegramAdapter:
     
     def _get_bot_token(self, business_id: str) -> str:
         """Obtiene el token del bot para un negocio específico"""
-        #token_key = f"TELEGRAM_TOKEN_{business_id}"
+        token_key = f"TELEGRAM_TOKEN_{business_id}"
         #logger.info(f"Token key: {token_key}")
         token = os.getenv(token_key)
 
